@@ -25,7 +25,7 @@ const StyledLink = styled(Link)`
 export default function ElectionList({ elections }) {
   return (
     <div>
-      {elections.map((election) => (
+      {(elections || []).map((election) =>(
         <ElectionCard key={election.id}>
           <h3>{election.title}</h3>
           <p>{election.hasVoted ? 'You have voted.' : 'You have not voted yet.'}</p>
