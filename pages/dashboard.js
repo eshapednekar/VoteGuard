@@ -1,4 +1,4 @@
-import { useVoteGuard } from '../pages/src/context/VoteGuardContext';
+import { useVoteGuard } from '../context/VoteGuardContext';
 import Link from 'next/link';
 import styled from 'styled-components';
 import ElectionList from '../pages/components/electionList';

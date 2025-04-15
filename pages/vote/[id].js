@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useState } from 'react';
-import { useVoteGuard } from '../../pages/src/context/VoteGuardContext';
+import { useVoteGuard } from '../../context/VoteGuardContext';
 
 const Wrapper = styled.div`
   padding: 2rem;

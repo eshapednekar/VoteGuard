@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { mockElections } from '../../../pages/mock/mockElections';
+import { mockElections } from '../mock/mockElections';
 
 const VoteGuardContext = createContext();
 export const useVoteGuard = () => useContext(VoteGuardContext);
