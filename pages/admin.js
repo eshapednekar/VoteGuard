@@ -22,7 +22,8 @@ const Input = styled.input`
 const Button = styled.button`
   background-color: #0070f3;
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.0rem;
+  margin: 0.5rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
