@@ -22,14 +22,32 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const DisabledButton = styled.div`
+  margin-top: 1rem;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background-color: #aaa;
+  color: white;
+  border-radius: 6px;
+`;
+
 export default function ElectionList({ elections }) {
   return (
     <div>
       {(elections || []).map((election) =>(
         <ElectionCard key={election.id}>
           <h3>{election.title}</h3>
-          <p>{election.hasVoted ? 'You have voted.' : 'You have not voted yet.'}</p>
-          <StyledLink href={`/vote/${election.id}`}>View & Vote</StyledLink>
+          {election.hasVoted ? (
+            <>
+              <p>You have already voted.</p>
+              <DisabledButton>Voting Closed</DisabledButton>
+            </>
+          ) : (
+            <>
+              <p>Voting open</p>
+              <StyledLink href={`/vote/${election.id}`}>Vote Now</StyledLink>
+            </>
+          )}
         </ElectionCard>
       ))}
     </div>

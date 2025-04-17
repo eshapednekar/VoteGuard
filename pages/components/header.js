@@ -37,6 +37,7 @@ export default function Header() {
         <StyledLink href="/">Home</StyledLink>
         <StyledLink href="/dashboard">Dashboard</StyledLink>
         <StyledLink href="/admin">Admin</StyledLink>
+        <StyledLink href="/results">Results</StyledLink> 
       </NavLinks>
     </Nav>
   );
