@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
+import { useVoteGuard } from '../context/VoteGuardContext';
 
 const Wrapper = styled.div`
   padding: 3rem;
@@ -37,12 +38,44 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const AddressBox = styled.div`
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  font-family: monospace;
+`;
+
+const Button = styled.button`
+  padding: 0.5rem 1rem;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 1rem;
+`;
+
+
 export default function Home() {
+  const { currentAccount, connectWallet } = useVoteGuard();
   return (
     <Wrapper>
       <Title>Welcome to VoteGuard</Title>
       <Subtitle>Secure and transparent voting on the blockchain.</Subtitle>
-
+      <div>
+      {!currentAccount ? (
+        <div>
+          <p>No wallet connected.</p>
+          <Button onClick={connectWallet}>Connect Wallet</Button>
+        </div>
+      ) : (
+        <div>
+          <p>Wallet Connected:</p>
+          <AddressBox>{currentAccount}</AddressBox>
+        </div>
+      )}
+      </div>
       <ButtonGroup>
         <StyledLink href="/dashboard">Go to Dashboard</StyledLink>
         <StyledLink href="/admin">Go to Admin Panel</StyledLink>
