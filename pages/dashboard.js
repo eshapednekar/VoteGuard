@@ -2,6 +2,8 @@ import { useVoteGuard } from '../context/VoteGuardContext';
 import Link from 'next/link';
 import styled from 'styled-components';
 import ElectionList from '../pages/components/electionList';
+import { getContract } from "../contract";
+import { useState, useEffect } from 'react';
 
 const Wrapper = styled.div`
   padding: 2rem;
@@ -28,6 +30,24 @@ const Button = styled.button`
 export default function Dashboard() {
   const { currentAccount, connectWallet } = useVoteGuard();
   const { elections } = useVoteGuard();
+  const [title, setTitle] = useState("");
+
+
+  useEffect(() => {
+    const fetchTitle = async () => {
+      try {
+        console.log("Fetching contract...");
+        const contract = await getContract();
+        console.log("Contract obtained:", contract);
+        const electionTitle = await contract.getTitle(1);
+        setTitle(electionTitle);
+      } catch (err) {
+        console.error("Error fetching election title:", err);
+      }
+    };
+
+    fetchTitle();
+  }, []);
 
   return (
     <Wrapper>
@@ -46,7 +66,7 @@ export default function Dashboard() {
       <br />
       <Link href="/">← Back to Home</Link>
       <h2>Active Elections</h2>
-      <ElectionList elections={elections} />
+      <p>{title}</p>
     </Wrapper>
   );
 }
