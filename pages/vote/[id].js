@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useState } from 'react';
 import { useVoteGuard } from '../../context/VoteGuardContext';
-import abi from "../contractABI.json";
 
 const Wrapper = styled.div`
   padding: 2rem;
@@ -23,11 +22,8 @@ const CandidateButton = styled.button`
   }
 `;
 
-
-const contractAddress = "0xfD1Dda485D613Ecf0109EFfc0Ef0E236f05EeC0e";
-
 export default function VotePage() {
-  /*const router = useRouter();
+  const router = useRouter();
   const { id } = router.query;
 
   const { elections } = useVoteGuard();
@@ -42,28 +38,23 @@ export default function VotePage() {
 
   };
 
-  if (!election) return <Wrapper>Election not found.</Wrapper>;*/
-
-  const signer = useSigner();
-  const [title, setTitle] = useState('');
-  const [candidates, setCandidates] = useState('');
-
-  const handleSubmit = async () => {
-    if (!signer) return;
-
-    const contract = new ethers.Contract(contractAddress, abi, signer);
-    await contract.createElection(title, candidates.split(',').map(s => s.trim()));
-    alert("Election Created!");
-  };
+  if (!election) return <Wrapper>Election not found.</Wrapper>;
 
   return (
     <Wrapper>
-      <div>
-      <h2>Create Election</h2>
-      <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Election Title" />
-      <input value={candidates} onChange={(e) => setCandidates(e.target.value)} placeholder="Candidates (comma-separated)" />
-      <button onClick={handleSubmit}>Create</button>
-    </div>
+      <h2>{election.title}</h2>
+      {voted ? (
+        <p>Your vote has been recorded.</p>
+      ) : (
+        <>
+          <p>Select a candidate to vote for:</p>
+          {election.candidates.map((name) => (
+            <CandidateButton key={name} onClick={() => saveVote(name)}>
+              {name}
+            </CandidateButton>
+          ))}
+        </>
+      )}
     </Wrapper>
   );
 }
