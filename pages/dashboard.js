@@ -52,6 +52,7 @@ export default function Dashboard() {
   return (
     <Wrapper>
       <h2>Dashboard</h2>
+      <p>Please connect your wallet.</p>
       {!currentAccount ? (
         <div>
           <p>No wallet connected.</p>
@@ -64,7 +65,6 @@ export default function Dashboard() {
         </div>
       )}
       <br />
-      <Link href="/">← Back to Home</Link>
       <h2>Active Elections</h2>
       <p>{title}</p>
     </Wrapper>
