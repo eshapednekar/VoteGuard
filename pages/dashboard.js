@@ -29,24 +29,43 @@ const Button = styled.button`
 
 export default function Dashboard() {
   const { currentAccount, connectWallet } = useVoteGuard();
-  const { elections } = useVoteGuard();
+  const elections = [];
   const [title, setTitle] = useState("");
 
 
+
   useEffect(() => {
-    const fetchTitle = async () => {
+    const fetchAllElections = async () => {
       try {
-        console.log("Fetching contract...");
         const contract = await getContract();
-        console.log("Contract obtained:", contract);
-        const electionTitle = await contract.getTitle(1);
-        setTitle(electionTitle);
+
+        // 1) read how many elections exist
+        const nextIdBn = await contract.nextElectionId();
+        const count    = nextIdBn.toNumber();  
+
+        // 2) build an array of promises for each election
+        const electionPromises = [];
+        for (let id = 1; id < count; id++) {
+          electionPromises.push(
+            Promise.all([
+              contract.getTitle(id),
+              contract.isElectionOpen(id)
+            ]).then(([ title, isOpen ]) => ({ id, title, isOpen }))
+          );
+        }
+
+        // 3) await all of them in parallel
+        const results = await Promise.all(electionPromises);
+
+        // 4) store in state
+        setElections(results);
+
       } catch (err) {
-        console.error("Error fetching election title:", err);
+        console.error("couldn't load elections", err);
       }
     };
 
-    fetchTitle();
+    fetchAllElections();
   }, []);
 
   return (
@@ -58,13 +77,22 @@ export default function Dashboard() {
           <Button onClick={connectWallet}>Connect Wallet</Button>
         </div>
       ) : (
-        <div>
+        <>
           <p>Wallet Connected:</p>
           <AddressBox>{currentAccount}</AddressBox>
-          <h2>Active Elections</h2>
-        <p>{title}</p>
-        </div>
-      )}      
+
+          <h2>All Elections</h2>
+          {elections.length === 0
+            ? <p>No elections found.</p>
+            : elections.map(e => (
+                <div key={e.id} style={{ marginBottom: '1rem' }}>
+                  <strong>#{e.id}:</strong> {e.title} &nbsp;
+                  <em>({e.isOpen ? 'Open' : 'Closed'})</em>
+                </div>
+              ))
+          }
+        </>
+      )}
     </Wrapper>
   );
 }
