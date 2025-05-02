@@ -96,7 +96,7 @@ export default function AdminPanel() {
           disabled={creating || !newCandidate.trim()}
           variant="secondary"
         >
-          + Add Candidate
+          Add Candidate
         </Button>
 
         {candidates.length > 0 && (
