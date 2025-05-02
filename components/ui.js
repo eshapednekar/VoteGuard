@@ -33,7 +33,7 @@ export const Button = styled.button`
   }
 `;
 
-const ButtonGroup = styled.div`
+export const ButtonGroup = styled.div`
   display: flex;
   gap: 1rem;   /* <-- 1rem (16px) gap between each button */
   margin-top: 1.5rem;
