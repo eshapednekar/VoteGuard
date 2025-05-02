@@ -23,34 +23,84 @@ const CandidateButton = styled.button`
 `;
 
 export default function VotePage() {
-  const router = useRouter();
-  const { id } = router.query;
+  const { query } = useRouter();
+  const { id } = parseInt(query.id, 10);
 
-  const { elections } = useVoteGuard();
-  const election = elections.find((e) => e.id === parseInt(id));
-  const [voted, setVoted] = useState(false);
-  const { castVote } = useVoteGuard();
+  const [ title, setTitle ]         = useState('');
+  const [ candidates, setCandidates ] = useState([]);
+  const [ isOpen, setIsOpen ]       = useState(false);
+  const [ voted, setVoted ]         = useState(false);
+  const [ loading, setLoading ]     = useState(false);
 
-  const saveVote = (candidate) => {
-    console.log(`Voted for ${candidate} in election ID ${id}`);
-    castVote(election.id);
-    setVoted(true);
+  useEffect(() => {
+    if (!id) return;
 
+    (async () => {
+      try {
+        const c = await getContract();
+
+        const [ onChainTitle, openFlag, countBn ] = await Promise.all([
+          c.getTitle(id),
+          c.isElectionOpen(id),
+          c.getCandidateCount(id)
+        ]);
+
+        setTitle(onChainTitle);
+        setIsOpen(openFlag);
+
+        // fetch each candidate string
+        const count = countBn.toNumber();
+        const names = await Promise.all(
+          Array.from({ length: count }, (_, idx) =>
+            c.getCandidate(id, idx)
+          )
+        );
+        setCandidates(names);
+
+        // optionally check if user already voted:
+        // const hasVoted = await c.hasUserVoted(id, await c.signer.getAddress());
+        // setVoted(hasVoted);
+      } catch (err) {
+        console.error("error loading election", err);
+      }
+    })();
+  }, [id]);
+
+  const castVote = async (candidateIndex) => {
+    setLoading(true);
+    try {
+      const c = await getContract();
+      const tx = await c.vote(id, candidateIndex);
+      await tx.wait();
+      setVoted(true);
+    } catch (err) {
+      console.error("vote failed", err);
+    }
+    setLoading(false);
   };
 
-  if (!election) return <Wrapper>Election not found.</Wrapper>;
+
+
+  if (!id) return <Wrapper>Loading…</Wrapper>;
+
 
   return (
     <Wrapper>
-      <h2>{election.title}</h2>
-      {voted ? (
-        <p>Your vote has been recorded.</p>
+      <h2>{title || 'Election #' + id}</h2>
+      {!isOpen && !voted ? (
+        <p>This election is closed.</p>
+      ) : voted ? (
+        <p>Your vote has been recorded. Thank you!</p>
       ) : (
         <>
           <p>Select a candidate to vote for:</p>
-          {election.candidates.map((name) => (
-            <CandidateButton key={name} onClick={() => saveVote(name)}>
-              {name}
+          {candidates.map((name, idx) => (
+            <CandidateButton
+              key={idx}
+              onClick={() => castVote(idx)}
+              disabled={loading}
+            >
+              {loading ? 'Submitting…' : name}
             </CandidateButton>
           ))}
         </>

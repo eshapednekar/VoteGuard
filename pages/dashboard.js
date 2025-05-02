@@ -83,10 +83,23 @@ export default function Dashboard() {
           {elections.length === 0
             ? <p>No elections found.</p>
             : elections.map(e => (
-                <div key={e.id} style={{ marginBottom: '1rem' }}>
+              <Link
+              key={e.id}
+              href={`/vote/${e.id}`}
+              passHref
+              style={{
+                display: "block",
+                textDecoration: "none",
+                color: "inherit",
+                marginBottom: "1rem",
+                padding: "0.5rem",
+                border: "1px solid #ddd",
+                borderRadius: 4
+              }}
+              >
                   <strong>#{e.id}:</strong> {e.title} &nbsp;
                   <em>({e.isOpen ? 'Open' : 'Closed'})</em>
-                </div>
+                </Link>
               ))
           }
         </>
