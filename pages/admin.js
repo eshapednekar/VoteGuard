@@ -42,13 +42,12 @@ const Tag = styled.span`
 `;
 
 export default function AdminPanel() {
-  const [ title, setTitle ]             = useState('');
-  const [ candidates, setCandidates ]   = useState<string[]>([]);
+  const [ title, setTitle ]               = useState('');
+  const [ candidates, setCandidates ]     = useState([]);
   const [ newCandidate, setNewCandidate ] = useState('');
-  
-  const [ creating, setCreating ] = useState(false);
-  const [ txHash, setTxHash ]     = useState<string| null>(null);
-  const [ error, setError ]       = useState<string| null>(null);
+  const [ creating, setCreating ]         = useState(false);
+  const [ txHash, setTxHash ]             = useState(null);
+  const [ error, setError ]               = useState(null);
 
 
   const handleAddCandidate = (e) => {
