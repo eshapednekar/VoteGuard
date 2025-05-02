@@ -34,7 +34,6 @@ export default function Header() {
     <Nav>
       <NavTitle>VoteGuard</NavTitle>
       <NavLinks>
-        <StyledLink href="/">Home</StyledLink>
         <StyledLink href="/dashboard">Dashboard</StyledLink>
         <StyledLink href="/admin">Admin</StyledLink>
         <StyledLink href="/results">Results</StyledLink> 

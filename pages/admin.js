@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useVoteGuard } from '../context/VoteGuardContext';
 import { getContract } from "../contract";
+import { Wrapper, Button, Tag } from './components/ui';
 
-const Wrapper = styled.div`
-  padding: 2rem;
-`;
 
 const Form = styled.form`
   margin-top: 1rem;
@@ -20,27 +17,6 @@ const Input = styled.input`
   border: 1px solid #ccc;
 `;
 
-const Button = styled.button`
-  background-color: #0070f3;
-  color: white;
-  padding: 0.75rem 1.0rem;
-  margin: 0.5rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #005bb5;
-  }
-`;
-
-const Tag = styled.span`
-  background-color: #eaeaea;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  margin-right: 0.5rem;
-  display: inline-block;
-`;
 
 export default function AdminPanel() {
   const [ title, setTitle ]               = useState('');

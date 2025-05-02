@@ -1,27 +1,9 @@
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import { useVoteGuard } from '../../context/VoteGuardContext';
 import { getContract } from "../../contract";
+import { Wrapper, Button } from './components/ui';
 
-const Wrapper = styled.div`
-  padding: 2rem;
-`;
-
-const CandidateButton = styled.button`
-  display: block;
-  margin: 1rem 0;
-  padding: 0.75rem 1.25rem;
-  background-color: #0070f3;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #005bb5;
-  }
-`;
 
 export default function VotePage() {
   const router = useRouter();
@@ -111,13 +93,13 @@ export default function VotePage() {
         <>
           <p>Select a candidate to vote for:</p>
           {candidates.map((name, idx) => (
-            <CandidateButton
+            <Button
               key={idx}
               onClick={() => castVote(idx)}
               disabled={submitting}
             >
               {submitting ? 'Submitting…' : name}
-            </CandidateButton>
+            </Button>
           ))}
         </>
       )}

@@ -1,13 +1,10 @@
 import { useVoteGuard } from '../context/VoteGuardContext';
 import Link from 'next/link';
 import styled from 'styled-components';
-import ElectionList from '../pages/components/electionList';
 import { getContract } from "../contract";
 import { useState, useEffect } from 'react';
+import { Wrapper, Button } from './components/ui';
 
-const Wrapper = styled.div`
-  padding: 2rem;
-`;
 
 const AddressBox = styled.div`
   margin-top: 1rem;
@@ -17,15 +14,6 @@ const AddressBox = styled.div`
   font-family: monospace;
 `;
 
-const Button = styled.button`
-  padding: 0.5rem 1rem;
-  background-color: #0070f3;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 1rem;
-`;
 
 export default function Dashboard() {
   const { currentAccount, connectWallet } = useVoteGuard();

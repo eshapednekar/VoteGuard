@@ -1,18 +1,7 @@
-import { useVoteGuard } from '../context/VoteGuardContext';
-import styled from 'styled-components';
 import { getContract } from '../contract';
 import { useState, useEffect } from 'react';
+import { Wrapper, Card } from './components/ui';
 
-const Wrapper = styled.div`
-  padding: 2rem;
-`;
-
-const ResultCard = styled.div`
-  background-color: #f4f4f4;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-`;
 
 export default function ResultsPage() {
   const [results, setResults] = useState([]);
@@ -80,7 +69,7 @@ export default function ResultsPage() {
         <p>No elections available yet.</p>
       ) : (
         results.map(({ id, title, candidates, votes }) => (
-          <ResultCard key={id}>
+          <Card key={id}>
             <h3>{title}</h3>
             <ul>
               {candidates.map((name, idx) => (
@@ -89,7 +78,7 @@ export default function ResultsPage() {
                 </li>
               ))}
             </ul>
-          </ResultCard>
+          </Card>
         ))
       )}
     </Wrapper>
