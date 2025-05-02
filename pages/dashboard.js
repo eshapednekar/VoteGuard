@@ -29,14 +29,8 @@ const IconWrapper = styled.div`
   border-radius: 50%;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   font-size: 1.5rem;
-  animation: pulse 2s infinite;
-
-  @keyframes pulse {
-    0%,100% { transform: scale(1); }
-    50%     { transform: scale(1.1); }
-  }
 `;
 
 
