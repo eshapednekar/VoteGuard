@@ -93,7 +93,11 @@ export default function Dashboard() {
           {elections.length === 0
             ? <p>No elections found.</p>
             : elections.map(e => (
-              <Card href={`/vote/${e.id}`} key={e.id}>
+              <Link href={`/vote/${e.id}`} passHref key={e.id}>
+              <Card
+              as="a"                   
+              style={{ cursor: 'pointer' }}
+            >
                 <div style={{
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -103,6 +107,7 @@ export default function Dashboard() {
                  <em>({e.isOpen ? 'Open' : 'Closed'})</em>
                  </div>
              </Card>
+             </Link>
              ))
            }
          </>
