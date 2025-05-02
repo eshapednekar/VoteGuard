@@ -62,11 +62,9 @@ export default function Dashboard() {
       try {
         const contract = await getContract();
 
-        // 1) read how many elections exist
         const nextIdBn = await contract.nextElectionId();
         const count    = nextIdBn.toNumber();  
 
-        // 2) build an array of promises for each election
         const electionPromises = [];
         for (let id = 1; id < count; id++) {
           electionPromises.push(
@@ -77,10 +75,8 @@ export default function Dashboard() {
           );
         }
 
-        // 3) await all of them in parallel
         const results = await Promise.all(electionPromises);
 
-        // 4) store in state
         setElections(results);
 
       } catch (err) {
