@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { getContract } from "../contract";
 import { useState, useEffect } from 'react';
 import { Wrapper, Button } from '../components/ui';
+import { FaWallet } from 'react-icons/fa';
 
 
 const AddressBox = styled.div`
@@ -12,6 +13,30 @@ const AddressBox = styled.div`
   background-color: #f0f0f0;
   border-radius: 8px;
   font-family: monospace;
+`;
+
+const Title = styled.h1`
+  margin-bottom: ${({ theme }) => theme.space[3]}px;
+  font-family: ${({ theme }) => theme.fonts.heading};
+  color: ${({ theme }) => theme.colors.text};
+`;
+
+const IconWrapper = styled.div`
+  background: ${({ theme }) => theme.colors.accent};
+  color: #fff;
+  width: 64px; height: 64px;
+  margin: 0 auto ${({ theme }) => theme.space[4]}px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  animation: pulse 2s infinite;
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50%     { transform: scale(1.1); }
+  }
 `;
 
 
@@ -56,10 +81,11 @@ export default function Dashboard() {
 
   return (
     <Wrapper>
-      <h2>Dashboard</h2>
+      <IconWrapper><FaWallet /></IconWrapper>
+      <Title>Welcome!</Title>
       {!currentAccount ? (
         <div>
-          <p>Please connect your wallet.</p>
+          <p>Please connect your wallet to get started.</p>
           <Button onClick={connectWallet}>Connect Wallet</Button>
         </div>
       ) : (

@@ -33,6 +33,12 @@ export const Button = styled.button`
   }
 `;
 
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;   /* <-- 1rem (16px) gap between each button */
+  margin-top: 1.5rem;
+`;
+
 // Soft‑shadow card container
 export const Card = styled.div`
   background: #fff;

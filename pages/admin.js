@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { getContract } from "../contract";
-import { Wrapper, Button, Tag } from '../components/ui';
+import { Wrapper, Button, Tag, ButtonGroup } from '../components/ui';
 
 
 const Form = styled.form`
@@ -90,6 +90,7 @@ export default function AdminPanel() {
           placeholder="e.g., Alice"
           disabled={creating}
         />
+        <ButtonGroup>
         <Button
           type="button"
           onClick={handleAddCandidate}
@@ -111,6 +112,7 @@ export default function AdminPanel() {
         <Button type="submit" disabled={creating}>
           {creating ? 'Creating…' : 'Create Election'}
         </Button>
+        </ButtonGroup>
       </Form>
     </Wrapper>
   );
