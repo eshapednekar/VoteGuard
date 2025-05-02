@@ -33,7 +33,7 @@ export default function VotePage() {
   const [ loading, setLoading ]     = useState(false);
 
   useEffect(() => {
-    if (!id) return;
+    if (!router.isReady || electionId === null) return;
 
     (async () => {
       try {
@@ -64,7 +64,7 @@ export default function VotePage() {
         console.error("error loading election", err);
       }
     })();
-  }, [id]);
+  }, [router.isReady, electionId]);
 
   const castVote = async (candidateIndex) => {
     setLoading(true);
@@ -79,9 +79,13 @@ export default function VotePage() {
     setLoading(false);
   };
 
+  if (!router.isReady) {
+    return <Wrapper>Loading…</Wrapper>;
+  }
 
-
-  if (!id) return <Wrapper>Loading…</Wrapper>;
+  if (electionId === null) {
+    return <Wrapper>Invalid election ID.</Wrapper>;
+  }
 
 
   return (
