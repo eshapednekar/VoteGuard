@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { getContract } from "../contract";
 import { useState, useEffect } from 'react';
-import { Wrapper, Button } from '../components/ui';
+import { Wrapper, Button, Card } from '../components/ui';
 import { FaWallet } from 'react-icons/fa';
 
 
@@ -29,9 +29,11 @@ const IconWrapper = styled.div`
   border-radius: 50%;
   display: flex;
   align-items: center;
-  justify-content: start;
+  justify-content: center;
   font-size: 1.5rem;
 `;
+
+
 
 
 export default function Dashboard() {
@@ -91,26 +93,19 @@ export default function Dashboard() {
           {elections.length === 0
             ? <p>No elections found.</p>
             : elections.map(e => (
-              <Link
-              key={e.id}
-              href={`/vote/${e.id}`}
-              passHref
-              style={{
-                display: "block",
-                textDecoration: "none",
-                color: "inherit",
-                marginBottom: "1rem",
-                padding: "0.5rem",
-                border: "1px solid #ddd",
-                borderRadius: 4
-              }}
-              >
-                  <strong>#{e.id}:</strong> {e.title} &nbsp;
-                  <em>({e.isOpen ? 'Open' : 'Closed'})</em>
-                </Link>
-              ))
-          }
-        </>
+              <Card href={`/vote/${e.id}`} key={e.id}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                 <strong>#{e.id}:</strong> {e.title} &nbsp;
+                 <em>({e.isOpen ? 'Open' : 'Closed'})</em>
+                 </div>
+             </Card>
+             ))
+           }
+         </>
       )}
     </Wrapper>
   );
