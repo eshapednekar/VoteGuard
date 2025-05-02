@@ -1,6 +1,7 @@
 import { useVoteGuard } from '../context/VoteGuardContext';
 import styled from 'styled-components';
 import { getContract } from '../contract';
+import { useState, useEffect } from 'react';
 
 const Wrapper = styled.div`
   padding: 2rem;
