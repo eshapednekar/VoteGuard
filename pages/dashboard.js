@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { getContract } from "../contract";
 import { useState, useEffect } from 'react';
-import { Wrapper, Button, Card } from '../components/ui';
+import { Wrapper, Button } from '../components/ui';
 import { FaWallet } from 'react-icons/fa';
 
 
@@ -33,7 +33,23 @@ const IconWrapper = styled.div`
   font-size: 1.5rem;
 `;
 
+const ElectionCard = styled(Link)`
+  display: block;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  color: inherit;           
+  text-decoration: none;    
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+`
 
 
 export default function Dashboard() {
@@ -93,25 +109,16 @@ export default function Dashboard() {
           {elections.length === 0
             ? <p>No elections found.</p>
             : elections.map(e => (
-              <Link href={`/vote/${e.id}`} key={e.id}>
-              <a 
-              style={{
-                textDecoration: 'none',
-                color: 'inherit',        // ← make it inherit whatever the Card’s color is
-              }}
-               >
-                <Card>
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center'
-                  }}>
-                    <span><strong>#{e.id}:</strong> {e.title}</span>
-                    <em>({e.isOpen ? 'Open' : 'Closed'})</em>
-                  </div>
-                </Card>
-              </a>
-            </Link>
+              <ElectionCard key={e.id} href={`/vote/${e.id}`}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+              }}>
+              <strong>#{e.id}:</strong> {e.title}
+              <em>({e.isOpen ? 'Open' : 'Closed'})</em>
+            </div>
+          </ElectionCard>
          ))}
          </>
       )}
