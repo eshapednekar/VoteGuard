@@ -64,9 +64,11 @@ export default function VotePage() {
         );
         setCandidates(names);
 
-        // optionally check if user already voted:
-        // const hasVoted = await c.hasUserVoted(id, await c.signer.getAddress());
-        // setVoted(hasVoted);
+        const signer     = c.provider.getSigner();
+        const userAddr   = await signer.getAddress();
+        const hasVotedOnChain = await c.hasUserVoted(electionId, userAddr);
+        setVoted(hasVotedOnChain);
+        
       } catch (err) {
         console.error("error loading election", err);
       } finally {
