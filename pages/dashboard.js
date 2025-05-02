@@ -94,7 +94,12 @@ export default function Dashboard() {
             ? <p>No elections found.</p>
             : elections.map(e => (
               <Link href={`/vote/${e.id}`} key={e.id}>
-              <a style={{ textDecoration: 'none'}}>
+              <a 
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',        // ← make it inherit whatever the Card’s color is
+              }}
+               >
                 <Card>
                   <div style={{
                     display: 'flex',
