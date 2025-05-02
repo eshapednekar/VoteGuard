@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useVoteGuard } from '../../context/VoteGuardContext';
 
 const Wrapper = styled.div`
