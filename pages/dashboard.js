@@ -29,10 +29,8 @@ const Button = styled.button`
 
 export default function Dashboard() {
   const { currentAccount, connectWallet } = useVoteGuard();
-  const elections = [];
-  const [title, setTitle] = useState("");
-
-
+  const [ elections, setElections ] = useState([]);
+  
 
   useEffect(() => {
     const fetchAllElections = async () => {
