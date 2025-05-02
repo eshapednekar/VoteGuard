@@ -93,22 +93,21 @@ export default function Dashboard() {
           {elections.length === 0
             ? <p>No elections found.</p>
             : elections.map(e => (
-              <Card
-              key={e.id}
-              onClick={() => router.push(`/vote/${e.id}`)}
-              style={{ cursor: 'pointer', marginBottom: '1rem' }}
-            >
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}>
-                 <strong>#{e.id}:</strong> {e.title} &nbsp;
-                 <em>({e.isOpen ? 'Open' : 'Closed'})</em>
-                 </div>
-             </Card>
-             ))
-           }
+              <Link href={`/vote/${e.id}`} key={e.id}>
+              <a style={{ textDecoration: 'none'}}>
+                <Card>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <span><strong>#{e.id}:</strong> {e.title}</span>
+                    <em>({e.isOpen ? 'Open' : 'Closed'})</em>
+                  </div>
+                </Card>
+              </a>
+            </Link>
+         ))}
          </>
       )}
     </Wrapper>
