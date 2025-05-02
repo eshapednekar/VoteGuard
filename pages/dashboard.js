@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components';
 import { getContract } from "../contract";
 import { useState, useEffect } from 'react';
-import { Wrapper, Button } from './components/ui';
+import { Wrapper, Button } from '../components/ui';
 
 
 const AddressBox = styled.div`

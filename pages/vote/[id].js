@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { getContract } from "../../contract";
-import { Wrapper, Button } from '../components/ui';
+import { Wrapper, Button } from '../../components/ui';
 
 
 export default function VotePage() {

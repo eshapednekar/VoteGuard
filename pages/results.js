@@ -1,6 +1,6 @@
 import { getContract } from '../contract';
 import { useState, useEffect } from 'react';
-import { Wrapper, Card } from './components/ui';
+import { Wrapper, Card } from '../components/uii';
 
 
 export default function ResultsPage() {

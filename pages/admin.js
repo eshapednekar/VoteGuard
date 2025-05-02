@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 import { getContract } from "../contract";
-import { Wrapper, Button, Tag } from './components/ui';
+import { Wrapper, Button, Tag } from '../components/ui';
 
 
 const Form = styled.form`
