@@ -16,16 +16,16 @@ const AddressBox = styled.div`
 `;
 
 const Title = styled.h1`
-  margin-bottom: ${({ theme }) => theme.space[3]}px;
-  font-family: ${({ theme }) => theme.fonts.heading};
-  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: 16px;
+  font-family: system-ui, sans-serif;
+  color: #333; 
 `;
 
 const IconWrapper = styled.div`
-  background: ${({ theme }) => theme.colors.accent};
+  background: #0070F3;
   color: #fff;
   width: 64px; height: 64px;
-  margin: 0 auto ${({ theme }) => theme.space[4]}px;
+  margin:  0 auto 32px; 
   border-radius: 50%;
   display: flex;
   align-items: center;
