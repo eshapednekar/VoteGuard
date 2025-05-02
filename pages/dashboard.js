@@ -52,21 +52,19 @@ export default function Dashboard() {
   return (
     <Wrapper>
       <h2>Dashboard</h2>
-      <p>Please connect your wallet.</p>
       {!currentAccount ? (
         <div>
-          <p>No wallet connected.</p>
+          <p>Please connect your wallet.</p>
           <Button onClick={connectWallet}>Connect Wallet</Button>
         </div>
       ) : (
         <div>
           <p>Wallet Connected:</p>
           <AddressBox>{currentAccount}</AddressBox>
+          <h2>Active Elections</h2>
+        <p>{title}</p>
         </div>
-      )}
-      <br />
-      <h2>Active Elections</h2>
-      <p>{title}</p>
+      )}      
     </Wrapper>
   );
 }
