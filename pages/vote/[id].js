@@ -23,8 +23,9 @@ const CandidateButton = styled.button`
 `;
 
 export default function VotePage() {
-  const { query } = useRouter();
-  const { id } = parseInt(query.id, 10);
+  const router = useRouter();
+  const { id } = router.query;
+  const electionId = id ? parseInt(id, 10) : null;
 
   const [ title, setTitle ]         = useState('');
   const [ candidates, setCandidates ] = useState([]);
