@@ -1,5 +1,6 @@
 import { useVoteGuard } from '../context/VoteGuardContext';
 import styled from 'styled-components';
+import { getContract } from '../contract';
 
 const Wrapper = styled.div`
   padding: 2rem;
@@ -13,21 +14,77 @@ const ResultCard = styled.div`
 `;
 
 export default function ResultsPage() {
-  const { elections } = useVoteGuard();
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      try {
+        const c = await getContract();
+
+        // figure out how many elections exist
+        const nextIdBn = await c.nextElectionId();
+        const nextId = nextIdBn.toNumber();
+
+        // build an array of promises for each election
+        const electionPromises = [];
+        for (let id = 1; id < nextId; id++) {
+          electionPromises.push(
+            (async () => {
+              const [title, countBn] = await Promise.all([
+                c.getTitle(id),
+                c.getCandidateCount(id),
+              ]);
+              const count = countBn.toNumber();
+
+              // fetch names and votes in parallel for this election
+              const names  = [];
+              const votes  = [];
+              for (let idx = 0; idx < count; idx++) {
+                names.push(await c.getCandidate(id, idx));
+                const vBn = await c.getVotes(id, idx);
+                votes.push(vBn.toNumber());
+              }
+
+              return { id, title, candidates: names, votes };
+            })()
+          );
+        }
+
+        const all = await Promise.all(electionPromises);
+        setResults(all);
+      } catch (err) {
+        console.error("Error fetching results:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchResults();
+  }, []);
+
+  if (loading) {
+    return (
+      <Wrapper>
+        <h2>Election Results</h2>
+        <p>Loading results…</p>
+      </Wrapper>
+    );
+  }
 
   return (
-    <Wrapper>
-      <h2>Election Results</h2>
-      {elections.length === 0 ? (
+      <Wrapper>
+        <h2>Election Results</h2>
+        {results.length === 0 ? (
         <p>No elections available yet.</p>
       ) : (
-        elections.map((election) => (
-          <ResultCard key={election.id}>
-            <h3>{election.title}</h3>
+        results.map(({ id, title, candidates, votes }) => (
+          <ResultCard key={id}>
+            <h3>{title}</h3>
             <ul>
-              {election.candidates.map((candidate, index) => (
-                <li key={index}>
-                  {candidate} — {election.votes ? election.votes[index] || 0 : 0} votes
+              {candidates.map((name, idx) => (
+                <li key={idx}>
+                  {name} — {votes[idx] ?? 0} votes
                 </li>
               ))}
             </ul>

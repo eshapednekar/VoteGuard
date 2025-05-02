@@ -92,9 +92,7 @@ export default function AdminPanel() {
       {error && <p style={{ color: 'crimson' }}> {error}</p>}
       {txHash && (
         <p style={{ color: 'green' }}>
-          Election created!  
-          <br />
-          Tx: <a href={`https://your-explorer/tx/${txHash}`} target="_blank" rel="noopener noreferrer">{txHash}</a>
+          Election created!
         </p>
       )}
 
