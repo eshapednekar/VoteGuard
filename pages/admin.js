@@ -42,59 +42,101 @@ const Tag = styled.span`
 `;
 
 export default function AdminPanel() {
-  const { createElection } = useVoteGuard();
-  const [title, setTitle] = useState('');
-  const [candidates, setCandidates] = useState([]);
-  const [newCandidate, setNewCandidate] = useState('');
-  const [created, setCreated] = useState(false);
+  const [ title, setTitle ]             = useState('');
+  const [ candidates, setCandidates ]   = useState<string[]>([]);
+  const [ newCandidate, setNewCandidate ] = useState('');
+  
+  const [ creating, setCreating ] = useState(false);
+  const [ txHash, setTxHash ]     = useState<string| null>(null);
+  const [ error, setError ]       = useState<string| null>(null);
+
 
   const handleAddCandidate = (e) => {
     e.preventDefault();
-    if (newCandidate.trim()) {
-      setCandidates([...candidates, newCandidate.trim()]);
-      setNewCandidate('');
+    const name = newCandidate.trim();
+    if (!name) return;
+    setCandidates(prev => [...prev, name]);
+    setNewCandidate('');
+  };
+
+  const handleCreateElection = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setTxHash(null);
+
+    if (!title.trim() || candidates.length === 0) {
+      setError('Provide a title and at least one candidate.');
+      return;
+    }
+
+    try {
+      setCreating(true);
+      const c = await getContract();
+      const tx = await c.createElection(title.trim(), candidates);
+      const receipt = await tx.wait();
+
+      setTxHash(receipt.transactionHash);
+      setTitle('');
+      setCandidates([]);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || 'Transaction failed');
+    } finally {
+      setCreating(false);
     }
   };
-
-  const handleCreateElection = (e) => {
-    e.preventDefault();
-    createElection(title, candidates);
-    setTitle('');
-    setCandidates([]);
-  };
-
   return (
     <Wrapper>
       <h2>Create a New Election</h2>
 
-      {created && <p>✅ Election created (mock)!</p>}
+      {error && <p style={{ color: 'crimson' }}> {error}</p>}
+      {txHash && (
+        <p style={{ color: 'green' }}>
+          Election created!  
+          <br />
+          Tx: <a href={`https://your-explorer/tx/${txHash}`} target="_blank" rel="noopener noreferrer">{txHash}</a>
+        </p>
+      )}
 
       <Form onSubmit={handleCreateElection}>
         <label>Election Title</label>
         <Input
           type="text"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={e => setTitle(e.target.value)}
           placeholder="e.g., Club President 2025"
+          disabled={creating}
         />
 
         <label>Add Candidate</label>
         <Input
           type="text"
           value={newCandidate}
-          onChange={(e) => setNewCandidate(e.target.value)}
+          onChange={e => setNewCandidate(e.target.value)}
           placeholder="e.g., Alice"
+          disabled={creating}
         />
-        <Button type="button" onClick={handleAddCandidate}>Add Candidate</Button>
+        <Button
+          type="button"
+          onClick={handleAddCandidate}
+          disabled={creating || !newCandidate.trim()}
+          variant="secondary"
+        >
+          + Add Candidate
+        </Button>
 
         {candidates.length > 0 && (
-          <div style={{ marginTop: '1rem' }}>
-            <p>Added Candidates:</p>
-            {candidates.map((c, idx) => <Tag key={idx}>{c}</Tag>)}
+          <div style={{ margin: '1rem 0' }}>
+            <p>Current Candidates:</p>
+            {candidates.map((c, i) => (
+              <Tag key={i}>{c}</Tag>
+            ))}
           </div>
         )}
 
-        <Button type="submit" style={{ marginTop: '2rem' }}>Create Election</Button>
+        <Button type="submit" disabled={creating}>
+          {creating ? 'Creating…' : 'Create Election'}
+        </Button>
       </Form>
     </Wrapper>
   );
