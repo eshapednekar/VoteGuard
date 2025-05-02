@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import { useVoteGuard } from '../../context/VoteGuardContext';
+import { getContract } from "../../contract";
 
 const Wrapper = styled.div`
   padding: 2rem;
@@ -32,6 +33,8 @@ export default function VotePage() {
   const [ isOpen, setIsOpen ]       = useState(false);
   const [ voted, setVoted ]         = useState(false);
   const [ loading, setLoading ]     = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
+  const [submitting, setSubmitting]   = useState(false);
 
   useEffect(() => {
     if (!router.isReady || electionId === null) return;
@@ -41,19 +44,22 @@ export default function VotePage() {
         const c = await getContract();
 
         const [ onChainTitle, openFlag, countBn ] = await Promise.all([
-          c.getTitle(id),
-          c.isElectionOpen(id),
-          c.getCandidateCount(id)
+          c.getTitle(electionId),
+          c.isElectionOpen(electionId),
+          c.getCandidateCount(electionId)
         ]);
-
+        
         setTitle(onChainTitle);
         setIsOpen(openFlag);
+
+        console.log("openFlag for", electionId, "is", openFlag);
+
 
         // fetch each candidate string
         const count = countBn.toNumber();
         const names = await Promise.all(
           Array.from({ length: count }, (_, idx) =>
-            c.getCandidate(id, idx)
+            c.getCandidate(electionId, idx)
           )
         );
         setCandidates(names);
@@ -63,24 +69,27 @@ export default function VotePage() {
         // setVoted(hasVoted);
       } catch (err) {
         console.error("error loading election", err);
+      } finally {
+        setLoadingData(false);
       }
     })();
   }, [router.isReady, electionId]);
 
   const castVote = async (candidateIndex) => {
-    setLoading(true);
+    setSubmitting(true);
     try {
       const c = await getContract();
-      const tx = await c.vote(id, candidateIndex);
+      const tx = await c.vote(electionId, candidateIndex);
       await tx.wait();
       setVoted(true);
     } catch (err) {
       console.error("vote failed", err);
+    }finally {
+      setSubmitting(false);
     }
-    setLoading(false);
   };
 
-  if (!router.isReady) {
+  if (!router.isReady || loadingData) {
     return <Wrapper>Loading…</Wrapper>;
   }
 
@@ -91,7 +100,7 @@ export default function VotePage() {
 
   return (
     <Wrapper>
-      <h2>{title || 'Election #' + id}</h2>
+      <h2>{title || `Election #${electionId}` }</h2>
       {!isOpen && !voted ? (
         <p>This election is closed.</p>
       ) : voted ? (
@@ -103,9 +112,9 @@ export default function VotePage() {
             <CandidateButton
               key={idx}
               onClick={() => castVote(idx)}
-              disabled={loading}
+              disabled={submitting}
             >
-              {loading ? 'Submitting…' : name}
+              {submitting ? 'Submitting…' : name}
             </CandidateButton>
           ))}
         </>
