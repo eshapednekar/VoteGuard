@@ -105,7 +105,7 @@ export default function VotePage() {
               key={idx}
               onClick={() => castVote(idx)}
               disabled={submitting}
-              style={{ width: '100px' }}
+              style={{ width: '250px' }}
             >
               {submitting ? 'Submitting…' : name}
             </Button>
