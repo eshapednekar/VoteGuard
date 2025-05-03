@@ -101,10 +101,11 @@ export default function VotePage() {
         <OptionsContainer>
           <p>Select a candidate to vote for:</p>
           {candidates.map((name, idx) => (
-            <Button
+            <Button 
               key={idx}
               onClick={() => castVote(idx)}
               disabled={submitting}
+              style={{ width: '100px' }}
             >
               {submitting ? 'Submitting…' : name}
             </Button>
