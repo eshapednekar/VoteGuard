@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import abi from "./contractABI.json";
 
-const contractAddress = "0xfD1Dda485D613Ecf0109EFfc0Ef0E236f05EeC0e";
+const contractAddress = "0x69daD92D4A6EBdbc9d9589a3c396De820ba24D48";
 
 export const getContract = async () => {
     if (!window.ethereum) throw new Error("MetaMask not detected");
