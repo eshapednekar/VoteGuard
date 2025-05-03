@@ -2,6 +2,14 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { getContract } from "../../contract";
 import { Wrapper, Button } from '../../components/ui';
+import styled from 'styled-components';
+
+const OptionsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;        
+  margin-top: 1rem; 
+`
 
 
 export default function VotePage() {
@@ -90,6 +98,7 @@ export default function VotePage() {
         <p>Your vote has been recorded. Thank you!</p>
       ) : (
         <>
+        <OptionsContainer>
           <p>Select a candidate to vote for:</p>
           {candidates.map((name, idx) => (
             <Button
@@ -100,6 +109,7 @@ export default function VotePage() {
               {submitting ? 'Submitting…' : name}
             </Button>
           ))}
+          </OptionsContainer>
         </>
       )}
     </Wrapper>
